@@ -8,18 +8,18 @@ RANLIB=ranlib
 LDFLAGS=
 
 BIGFILES=-D_FILE_OFFSET_BITS=64
-CFLAGS=-Wall -Winline -O2 -g $(BIGFILES) -DSPEC_CPU -std=gnu99 -fgnu89-inline -I/home/test/open64/include/4.2.3/
+CFLAGS=-fopenmp -Wall -Winline -O2 -g $(BIGFILES) -DSPEC_CPU -std=gnu99 -fgnu89-inline -I/home/test/open64/include/4.2.3/
 
 # Where you want it installed when you do 'make install'
 PREFIX=/usr/local
 
 OBJS= spec.w2c.o       \
-	  blocksort.o  \
+	  blocksort.o  	   \
       huffman.w2c.o    \
       crctable.w2c.o   \
       randtable.w2c.o  \
-      compress.o   \
-      decompress.o \
+      compress.o   	   \
+      decompress.o     \
       bzlib.o
 
 all: libbz2.a bzip2 

@@ -8,12 +8,12 @@ RANLIB=ranlib
 LDFLAGS=
 
 BIGFILES=-D_FILE_OFFSET_BITS=64
-CFLAGS=-Wall -Winline -O2 -g $(BIGFILES) -DSPEC_CPU -std=gnu99 -fgnu89-inline -I/home/test/open64/include/4.2.3/
+CFLAGS=-fopenmp -Wall -Winline -O2 -g $(BIGFILES) -DSPEC_CPU -std=gnu99 -fgnu89-inline -I/home/test/open64/include/4.2.3/
 
 # Where you want it installed when you do 'make install'
 PREFIX=/usr/local
 
-OBJS= attacks.w2c.o book.o crazy.w2c.o draw.w2c.o ecache.w2c.o epd.o eval.o leval.w2c.o \
+OBJS= attacks.w2c.o book.o crazy.o draw.w2c.o ecache.w2c.o epd.o eval.o leval.w2c.o \
 	  moves.w2c.o neval.o partner.w2c.o proof.o rcfile.w2c.o search.o see.w2c.o seval.o \
 	  ttable.w2c.o utils.o sjeng.o
 

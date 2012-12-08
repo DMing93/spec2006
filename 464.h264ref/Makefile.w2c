@@ -1,0 +1,45 @@
+SHELL=/bin/sh
+
+# To assist in cross-compiling
+ACC=acc
+CC=gcc
+AR=ar
+SED=sed
+RANLIB=ranlib
+LDFLAGS=-lm 
+
+CFLAGS=-fopenmp -g -Wall -Winline -O2 -DSPEC_CPU -std=gnu99 -fgnu89-inline -I/home/test/open64/include/4.2.3/
+
+# Where you want it installed when you do 'make install'
+PREFIX=/usr/local
+
+OBJS= annexb.w2c.o biariencode.o block.o cabac.o configfile.o context_ini.o \
+		 decoder.o explicit_gop.w2c.o fast_me.o filehandle.w2c.o fmo.w2c.o header.w2c.o image.o \
+		 intrarefresh.w2c.o leaky_bucket.w2c.o lencod.o loopFilter.o macroblock.o \
+		 mb_access.w2c.o mbuffer.o memalloc.w2c.o mv-search.o nal.o nalu.w2c.o nalucommon.w2c.o \
+		 output.o parset.o parsetcommon.w2c.o q_matrix.o q_offsets.o ratectl.w2c.o \
+		 rdopt.o rdopt_coding_state.w2c.o rdpicdecision.w2c.o refbuf.o rtp.w2c.o sei.w2c.o \
+		 slice.o transform8x8.o vlc.o weighted_prediction.o specrand.w2c.o
+
+all: h264ref
+
+h264ref: $(OBJS)
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(OBJS)
+
+%.w2c.o: %.w2c.c
+	$(CC) -c $(CFLAGS) -o $@ $<
+
+%.w2c.c: %.w2c.h
+	$(SED) -i s/_INT32\ inf\;// $<
+
+%.w2c.h: %.c
+	$(ACC) $<
+
+%.O: %.c
+	$(ACC) $<
+
+%.o: %.c
+	$(CC) -c $(CFLAGS) -o $@ $<
+
+clean: 
+	rm -f *.o *.B *.i *.I *.O *.spin h264ref
