@@ -13,14 +13,14 @@ CFLAGS=-Wall -Winline -O2 -g $(BIGFILES) -DSPEC_CPU -std=gnu99 -fgnu89-inline -I
 # Where you want it installed when you do 'make install'
 PREFIX=/usr/local
 
-OBJS= spec.O       \
-	  blocksort.O  \
-      huffman.O    \
-      crctable.O   \
-      randtable.O  \
-      compress.O   \
-      decompress.O \
-      bzlib.O
+OBJS= spec.w2c.o       \
+	  blocksort.o  \
+      huffman.w2c.o    \
+      crctable.w2c.o   \
+      randtable.w2c.o  \
+      compress.o   \
+      decompress.o \
+      bzlib.o
 
 all: libbz2.a bzip2 
 
@@ -35,6 +35,12 @@ libbz2.a: $(OBJS)
 		echo $(RANLIB) libbz2.a ; \
 		$(RANLIB) libbz2.a ; \
 	fi
+
+%.w2c.o: %.w2c.c
+	$(CC) -c $(CFLAGS) -o $@ $<
+
+%.w2c.c: %.c
+	$(ACC) $<
 
 %.O: %.c
 	$(ACC) $<
