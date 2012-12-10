@@ -1,0 +1,70 @@
+SHELL=/bin/sh
+
+# To assist in cross-compiling
+ACC=opencc
+AFC=openf95
+CC=gcc
+FC=gfortran
+AR=ar
+SED=sed
+RANLIB=ranlib
+LDFLAGS=-lm
+
+COMMON_FLAGS=-g -I. -DHAVE_CONFIG_H -DSPEC_CPU -DSPEC_CPU_LP64 -DSPEC_CPU_LINUX_X64
+
+CFLAGS=$(COMMON_FLAGS) -fopenmp -Wall -Winline -O2 -std=gnu99 -fgnu89-inline -I/home/test/open64/include/4.2.3/
+ACFLAGS=$(COMMON_FLAGS) -O2 -apo -m64 -PHASE:clist=true:c=off -Wb,-LNO:processors=4:minvar=off:ff=0:fusion=0:parallel_overhead=30000 -S
+AFFLGS=$(COMMON_FLAGS) -O2 -apo -m64 -PHASE:flist=true:c=off -Wb,-LNO:processors=4:minvar=off:ff=0:fusion=0:parallel_overhead=30000 -S
+
+# Where you want it installed when you do 'make install'
+PREFIX=/usr/local
+
+OBJS= 	3dview.o atomprop.o binio.o block_tx.o bondfree.o buffer.o \
+	 	calcgrid.o calch.o calcmu.o calcvir.o clincs.o comlib.o confio.o \
+	 	constr.o copyrite.o coupling.o csettle.o disre.o do_fit.o do_gct.o \
+	 	dummies.o ebin.o edsam.o enxio.o ewald.o ewald_util.o f77_wrappers.o \
+	 	fatal.o ffscanf.o fftgrid.o filenm.o fnbf.o force.o futil.o gbutil.o \
+	 	gctio.o genalg.o ghat.o glaasje.o gmx_system_xdr.o gmxfio.o ifunc.o \
+	 	index.o init.o init_sh.o innerc.o invblock.o ionize.o libxdrf.o macros.o \
+	 	main.o maths.o matio.o md.o mdatom.o mdebin.o mdrun.o memdump.o \
+	 	minimize.o mshift.o mvdata.o mvxvf.o names.o network.o nrama.o nrjac.o \
+	 	nrnb.o ns.o nsb.o nsgrid.o orires.o pargs.o pbc.o pdbio.o pme.o \
+	 	poisson.o pppm.o princ.o psgather.o pssolve.o psspread.o pull.o \
+	 	pullinit.o pullio.o pullutil.o rando.o random.o rbin.o rdgroup.o \
+	 	readinp.o relax_sh.o replace.o rmpbc.o shakef.o shift_util.o sim_util.o \
+	 	smalloc.o sortwater.o splittop.o stat.o statutil.o strdb.o string2.o \
+	 	symtab.o synclib.o tables.o tgroup.o tpxio.o trnio.o trxio.o txtdump.o \
+	 	typedefs.o update.o vcm.o vec.o viewit.o wgms.o wman.o wnblist.o \
+	 	writeps.o xdrd.o xtcio.o xutils.o xvgr.o
+
+FOBJS= flincs.w2f.fo fsettle.fppized.w2f.fo fshake.w2f.fo innerf.w2f.fo flincsd.w2f.fo fsettled.fppized.w2f.fo \
+	   fshaked.w2f.fo
+
+all: gromacs
+
+gromacs: $(FOBJS) $(OBJS)
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(FOBJS) $(OBJS)
+
+%.w2f.fo: %.sed.f
+	$(FC) $(CFLAGS) -c -o $@ $<
+
+%.w2f.f: %.f
+	$(AFC) $(AFFLGS) $<
+
+%.fo: %.f
+	$(FC) $(CFLAGS) -c -o $@ $<
+
+%.w2c.o: %.w2c.c
+	$(CC) -c $(CFLAGS) -o $@ $<
+
+%.w2c.c: %.c
+	$(ACC) $(ACFLAGS) $<
+
+%.O: %.c
+	$(ACC) $(ACFLAGS) $<
+
+%.o: %.c
+	$(CC) -c $(CFLAGS) -o $@ $<
+
+clean: 
+	rm -f *.o *.B *.i *.I *.o *.FO *.O *.w2c.c *.w2c.h *.w2f.f *.w2c.o *.spin sjeng

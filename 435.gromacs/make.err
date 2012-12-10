@@ -1,0 +1,2 @@
+specmake: /usr/local/sles9/gcc42-0325/bin/gfortran: Command not found
+specmake: *** [flincs.o] Error 127

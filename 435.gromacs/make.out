@@ -1,0 +1,1 @@
+/usr/local/sles9/gcc42-0325/bin/gfortran -c -o flincs.o    -O2       -DSPEC_CPU_LP64         flincs.f
