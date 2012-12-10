@@ -22,10 +22,15 @@ OBJS= av.o deb.w2c.o doio.o doop.o dump.o globals.o gv.o hv.o locale.w2c.o mg.o 
 		 Cwd.o Dumper.o HiRes.o IO.o Peek.o attrs.o poll.o stdio.w2c.o DynaLoader.o \
 		 MD5.o Storable.o Parser.o specrand.w2c.o Hostname.o Opcode.o
 
-all: perlbench 
+W2C= deb.w2c.c locale.w2c.c numeric.w2c.c perlapi.w2c.c perlmain.w2c.c \
+	 stdio.w2c.c
+
+all: apo perlbench 
 
 perlbench: $(OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(OBJS)
+
+apo: $(W2C)
 
 %.w2c.o: %.w2c.c
 	$(CC) -c $(CFLAGS) -o $@ $<
@@ -40,4 +45,4 @@ perlbench: $(OBJS)
 	$(CC) -c $(CFLAGS) -o $@ $<
 
 clean: 
-	rm -f *.o *.B *.i *.I *.O *.spin perlbench
+	rm -f *.o *.B *.i *.I *.O *.spin *.w2c.c *.w2c.h perlbench

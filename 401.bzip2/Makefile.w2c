@@ -17,7 +17,7 @@ ACFLAGS=$(COMMON_FLAGS) -O2 -apo -m64 -PHASE:clist=true:c=off -Wb,-LNO:processor
 # Where you want it installed when you do 'make install'
 PREFIX=/usr/local
 
-OBJS= spec.w2c.o       \
+OBJS= spec.o           \
 	  blocksort.o  	   \
       huffman.w2c.o    \
       crctable.w2c.o   \
@@ -26,10 +26,14 @@ OBJS= spec.w2c.o       \
       decompress.o     \
       bzlib.o
 
-all: libbz2.a bzip2 
+W2C=  huffman.w2c.c    \
+      crctable.w2c.c   \
+      randtable.w2c.c  
 
-bzip2: libbz2.a spec.o bzip2.o
-	$(CC) $(CFLAGS) $(LDFLAGS) -o bzip2 spec.o bzip2.o -L. -lbz2
+all: apo libbz2.a bzip2 
+
+bzip2: libbz2.a bzip2.o
+	$(CC) $(CFLAGS) $(LDFLAGS) -o bzip2 bzip2.o -L. -lbz2
 
 libbz2.a: $(OBJS)
 	rm -f libbz2.a
@@ -39,6 +43,8 @@ libbz2.a: $(OBJS)
 		echo $(RANLIB) libbz2.a ; \
 		$(RANLIB) libbz2.a ; \
 	fi
+
+apo: $(W2C)
 
 %.w2c.o: %.w2c.c
 	$(CC) -c $(CFLAGS) -o $@ $<
@@ -53,4 +59,4 @@ libbz2.a: $(OBJS)
 	$(CC) -c $(CFLAGS) -o $@ $<
 
 clean: 
-	rm -f *.o *.B *.i *.I *.O *.spin libbz2.a bzip2 
+	rm -f *.o *.B *.i *.I *.O *.spin *.w2c.c *.w2c.h libbz2.a bzip2 

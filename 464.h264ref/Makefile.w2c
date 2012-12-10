@@ -24,10 +24,17 @@ OBJS= annexb.w2c.o biariencode.o block.o cabac.o configfile.o context_ini.o \
 		 rdopt.o rdopt_coding_state.w2c.o rdpicdecision.w2c.o refbuf.o rtp.w2c.o sei.w2c.o \
 		 slice.o transform8x8.o vlc.o weighted_prediction.o specrand.w2c.o
 
-all: h264ref
+W2C=  annexb.w2c.c explicit_gop.w2c.c filehandle.w2c.c fmo.w2c.c header.w2c.c \
+	  intrarefresh.w2c.c leaky_bucket.w2c.c mb_access.w2c.c memalloc.w2c.c nalu.w2c.c nalucommon.w2c.c \
+	  parsetcommon.w2c.c ratectl.w2c.c rdopt_coding_state.w2c.c rdpicdecision.w2c.c rtp.w2c.c sei.w2c.c \
+	  specrand.w2c.c
+
+all: apo h264ref
 
 h264ref: $(OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(OBJS)
+
+apo: $(W2C)
 
 %.w2c.o: %.w2c.c
 	$(CC) -c $(CFLAGS) -o $@ $<
@@ -45,4 +52,4 @@ h264ref: $(OBJS)
 	$(CC) -c $(CFLAGS) -o $@ $<
 
 clean: 
-	rm -f *.o *.B *.i *.I *.O *.spin h264ref
+	rm -f *.o *.B *.i *.I *.O *.spin *.w2c.c *.w2c.h h264ref

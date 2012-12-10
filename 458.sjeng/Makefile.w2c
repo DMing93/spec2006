@@ -18,11 +18,16 @@ PREFIX=/usr/local
 OBJS= attacks.w2c.o book.o crazy.o draw.w2c.o ecache.w2c.o epd.o eval.o leval.w2c.o \
 	  moves.w2c.o neval.o partner.w2c.o proof.o rcfile.w2c.o search.o see.w2c.o seval.o \
 	  ttable.w2c.o utils.o sjeng.o
+W2C=  attacks.w2c.c draw.w2c.c ecache.w2c.c leval.w2c.c \
+	  moves.w2c.c partner.w2c.c rcfile.w2c.c see.w2c.c  \
+	  ttable.w2c.c
 
-all: sjeng 
+all: apo sjeng 
 
 sjeng: $(OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(OBJS)
+
+apo: $(W2C)
 
 %.w2c.o: %.w2c.c
 	$(CC) -c $(CFLAGS) -o $@ $<
@@ -37,4 +42,4 @@ sjeng: $(OBJS)
 	$(CC) -c $(CFLAGS) -o $@ $<
 
 clean: 
-	rm -f *.o *.B *.i *.I *.O *.spin sjeng
+	rm -f *.o *.B *.i *.I *.O *.w2c.c *.w2c.h *.spin sjeng
